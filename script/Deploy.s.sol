@@ -8,10 +8,8 @@ contract DeployScript is Script {
     function setUp() public {}
 
     function run() public {
-        vm.startBroadcast();
-
+        vm.startBroadcast(vm.envUint("PRIVATE_KEY"));
         DeployAll.deploy();
-
         vm.stopBroadcast();
     }
 }
