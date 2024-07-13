@@ -60,6 +60,6 @@ contract SchemaRegistry is ISchemaRegistry {
 
     function _grantPermission(bytes32 uid, address usr) private {
         _permissions[uid][usr] = 1;
-        emit GrantPermission(uid, usr);
+        emit GrantPermission(uid, usr, _registry[uid].schema);
     }
 }

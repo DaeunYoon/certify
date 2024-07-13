@@ -22,7 +22,7 @@ import { NLayout, NLayoutHeader, NLayoutSider, NLayoutFooter } from 'naive-ui';
       >
         <TheSidebar />
       </n-layout-sider>
-      <div class="p-2 flex-1">
+      <div class="px-6 py-2 flex-1">
         <slot />
       </div>
     </n-layout>

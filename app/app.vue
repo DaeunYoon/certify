@@ -2,6 +2,7 @@
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi';
 import { sepolia, baseSepolia, arbitrumSepolia } from 'viem/chains';
 import { reconnect } from '@wagmi/core';
+import { NModalProvider } from 'naive-ui';
 
 const runtimeConfig = useRuntimeConfig();
 
@@ -34,9 +35,11 @@ createWeb3Modal({
 </script>
 
 <template>
-  <ClientOnly>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </ClientOnly>
+  <n-modal-provider>
+    <ClientOnly>
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </ClientOnly>
+  </n-modal-provider>
 </template>
