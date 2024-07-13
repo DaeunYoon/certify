@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import { ISchemaRegistry, SchemaRecord } from "./ISchemaRegistry.sol";
-import { IAttestationRegistry, AttestationRecord } from "./IAttestationRegistry.sol";
-import { EMPTY_UID, MAX_TIMESTAMP } from "./Common.sol";
+import {ISchemaRegistry, SchemaRecord} from "./ISchemaRegistry.sol";
+import {IAttestationRegistry, AttestationRecord} from "./IAttestationRegistry.sol";
+import {EMPTY_UID, MAX_TIMESTAMP} from "./Common.sol";
 
 contract AttestationRegistry is IAttestationRegistry {
     ISchemaRegistry schemaRegistry;
@@ -11,17 +11,19 @@ contract AttestationRegistry is IAttestationRegistry {
     mapping(bytes32 => AttestationRecord) public _db;
     mapping(bytes32 => mapping(address => uint256)) private _permissions;
 
-    constructor (address _schemaRegistry) {
+    constructor(address _schemaRegistry) {
         schemaRegistry = ISchemaRegistry(_schemaRegistry);
     }
 
     /// @inheritdoc IAttestationRegistry
-    function attest(bytes32 schemaUID, bytes calldata data, address recipient) external override returns(bytes32) {
+    function attest(bytes32 schemaUID, bytes calldata data, address recipient) external override returns (bytes32) {
         // Ensure that we aren't attempting to attest to a non-existing schema.
         SchemaRecord memory schemaRecord = schemaRegistry.getSchema(schemaUID);
         require(schemaRecord.uid != EMPTY_UID, "Attestation/non-existing-schema");
-        require(schemaRegistry.hasAccessToSchema(schemaRecord.uid, msg.sender) == true, "Attestation/attester-not-allowed");
-    
+        require(
+            schemaRegistry.hasAccessToSchema(schemaRecord.uid, msg.sender) == true, "Attestation/attester-not-allowed"
+        );
+
         AttestationRecord memory attestation = AttestationRecord({
             uid: EMPTY_UID,
             schema: schemaUID,
@@ -58,7 +60,9 @@ contract AttestationRegistry is IAttestationRegistry {
     /// @inheritdoc IAttestationRegistry
     function revoke(bytes32 uid) external override {
         AttestationRecord memory attestation = _db[uid];
-        require(schemaRegistry.hasAccessToSchema(attestation.schema, msg.sender) == true, "Attestation/attester-not-allowed");
+        require(
+            schemaRegistry.hasAccessToSchema(attestation.schema, msg.sender) == true, "Attestation/attester-not-allowed"
+        );
 
         _db[uid].revokedAt = block.timestamp;
 
@@ -89,8 +93,8 @@ contract AttestationRegistry is IAttestationRegistry {
         AttestationRecord memory attestation = _db[uid];
         require(attestation.uid != EMPTY_UID, "Permission/attestation-not-found");
 
-        isAuthorizedUser = _permissions[uid][msg.sender] > block.timestamp
-            || schemaRegistry.hasAccessToSchema(attestation.schema, usr);
+        isAuthorizedUser =
+            _permissions[uid][msg.sender] > block.timestamp || schemaRegistry.hasAccessToSchema(attestation.schema, usr);
     }
 
     /// @dev Calculates a UID for a given attestation.
@@ -98,17 +102,16 @@ contract AttestationRegistry is IAttestationRegistry {
     /// @param bump A bump value to use in case of a UID conflict.
     /// @return Attestation UID.
     function _getUID(AttestationRecord memory attestation, uint32 bump) private pure returns (bytes32) {
-        return
-            keccak256(
-                abi.encodePacked(
-                    attestation.schema,
-                    attestation.recipient,
-                    attestation.attester,
-                    attestation.time,
-                    attestation.data,
-                    bump
-                )
-            );
+        return keccak256(
+            abi.encodePacked(
+                attestation.schema,
+                attestation.recipient,
+                attestation.attester,
+                attestation.time,
+                attestation.data,
+                bump
+            )
+        );
     }
 
     /// @dev Grants access to a specific attestation.

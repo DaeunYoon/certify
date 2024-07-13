@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import { Test } from "forge-std/Test.sol";
-import { ISchemaRegistry, SchemaRecord } from "../src/ISchemaRegistry.sol";
-import { DeployAll, DeployInstance } from "../script/dependencies/DeployAll.sol";
+import {Test} from "forge-std/Test.sol";
+import {ISchemaRegistry, SchemaRecord} from "../src/ISchemaRegistry.sol";
+import {DeployAll, DeployInstance} from "../script/dependencies/DeployAll.sol";
 
 contract SchemaRegistryTest is Test {
     // Contract instance
@@ -25,7 +25,7 @@ contract SchemaRegistryTest is Test {
 
     function testRegister() public {
         bytes32 expectedUid = keccak256(abi.encodePacked("schema"));
-        vm.expectEmit(true, false, false, false); 
+        vm.expectEmit(true, false, false, false);
         emit Registered(expectedUid);
         bytes32 uid = schemaRegistry.register("schema");
         assertEq(schemaRegistry.hasAccessToSchema(uid, address(this)), true);
@@ -42,7 +42,7 @@ contract SchemaRegistryTest is Test {
         assertEq(schemaRegistry.hasAccessToSchema(uid, alice), false);
         vm.stopPrank();
 
-        vm.expectEmit(true, true, false, false); 
+        vm.expectEmit(true, true, false, false);
         emit GrantPermission(uid, alice);
         schemaRegistry.grantPermission(uid, alice);
 
@@ -50,7 +50,7 @@ contract SchemaRegistryTest is Test {
         assertEq(schemaRegistry.hasAccessToSchema(uid, alice), true);
         vm.stopPrank();
 
-        vm.expectEmit(true, true, false, false); 
+        vm.expectEmit(true, true, false, false);
         emit DenyPermission(uid, alice);
         schemaRegistry.denyPermission(uid, alice);
 

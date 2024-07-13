@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import { EMPTY_UID } from "./Common.sol";
-import { ISchemaRegistry, SchemaRecord } from "./ISchemaRegistry.sol";
+import {EMPTY_UID} from "./Common.sol";
+import {ISchemaRegistry, SchemaRecord} from "./ISchemaRegistry.sol";
 
 contract SchemaRegistry is ISchemaRegistry {
     // Data
@@ -12,17 +12,14 @@ contract SchemaRegistry is ISchemaRegistry {
     constructor() {}
 
     /// @inheritdoc ISchemaRegistry
-    function register(string calldata schema) external returns (bytes32) {        
-        SchemaRecord memory schemaRecord = SchemaRecord({
-            uid: EMPTY_UID,
-            schema: schema
-        });
+    function register(string calldata schema) external returns (bytes32) {
+        SchemaRecord memory schemaRecord = SchemaRecord({uid: EMPTY_UID, schema: schema});
 
         bytes32 uid = _getUID(schemaRecord);
         require(_registry[uid].uid == EMPTY_UID, "SchemaRegistry/already-exists");
 
         schemaRecord.uid = uid;
-        
+
         _registry[uid] = schemaRecord;
         _grantPermission(uid, msg.sender);
 

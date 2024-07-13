@@ -11,12 +11,12 @@ interface ISchemaRegistry {
     /// @notice Emitted when a new schema has been registered
     /// @param uid The schema UID.
     event Registered(bytes32 indexed uid);
-    
+
     /// @notice Emitted when a user has been granted access to a schema
     /// @param uid The schema UID.
     /// @param usr The user address.
     event GrantPermission(bytes32 indexed uid, address indexed usr);
-    
+
     /// @notice Emitted when a user has been denied access to a schema
     /// @param uid The schema UID.
     /// @param usr The user address.

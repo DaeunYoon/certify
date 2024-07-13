@@ -18,8 +18,10 @@ interface IAttestationRegistry {
     /// @param recipient The address of the account who received the attestation.
     /// @param schema The schema UID.
     /// @param data The attestation data.
-    event Attested(bytes32 indexed uid, address indexed attester, address indexed recipient, bytes32 schema, bytes data);
-    
+    event Attested(
+        bytes32 indexed uid, address indexed attester, address indexed recipient, bytes32 schema, bytes data
+    );
+
     /// @notice Emitted when an attestation was revoked
     /// @param uid The attestation UID.
     event Revoked(bytes32 indexed uid);

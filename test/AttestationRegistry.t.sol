@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import { Test, console } from "forge-std/Test.sol";
-import { IAttestationRegistry } from "../src/IAttestationRegistry.sol";
-import { ISchemaRegistry } from "../src/ISchemaRegistry.sol";
-import { DeployAll, DeployInstance } from "../script/dependencies/DeployAll.sol";
+import {Test, console} from "forge-std/Test.sol";
+import {IAttestationRegistry} from "../src/IAttestationRegistry.sol";
+import {ISchemaRegistry} from "../src/ISchemaRegistry.sol";
+import {DeployAll, DeployInstance} from "../script/dependencies/DeployAll.sol";
 
 contract IAttestationRegistryTest is Test {
     // Contract instance
@@ -21,7 +21,9 @@ contract IAttestationRegistryTest is Test {
     uint256 futureTimestamp = block.timestamp + 1 days;
 
     // Events
-    event Attested(bytes32 indexed uid, address indexed attester, address indexed recipient, bytes32 schema, bytes data);
+    event Attested(
+        bytes32 indexed uid, address indexed attester, address indexed recipient, bytes32 schema, bytes data
+    );
     event Revoked(bytes32 indexed uid);
     event Granted(bytes32 indexed uid, address indexed user, uint256 maxTimestamp);
 
@@ -35,7 +37,7 @@ contract IAttestationRegistryTest is Test {
     function testAttestAndRevoke() public {
         bytes memory data = abi.encodePacked("data");
         bytes32 uid = attestationRegistry.attest(schemaUID, data, alice);
-        
+
         assertEq(attestationRegistry.getAttestation(uid).revokedAt, 0);
         attestationRegistry.revoke(uid);
         assertNotEq(attestationRegistry.getAttestation(uid).revokedAt, 0);

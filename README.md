@@ -39,6 +39,15 @@ $ forge fmt
 $ forge snapshot
 ```
 
+### Environment Variables
+- ARBITRUM_SEPOLIA_RPC_URL
+- BASE_SEPOLIA_RPC_URL
+- SEPOLIA_RPC_URL
+- ARBITRUM_SEPOLIA_BLOCKSCOUT_URL
+- BASE_SEPOLIA_BLOCKSCOUT_URL
+- SEPOLIA_BLOCKSCOUT_URL
+- PRIVATE_KEY: (optional) required to deploy contracts
+
 ### Anvil
 
 ```shell
