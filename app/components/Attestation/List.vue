@@ -4,9 +4,11 @@ import useClient from '~/composables/useClient';
 import useAccount from '~/composables/useAccount';
 import { getSchemaRegistryContract } from '~/contracts';
 import { NButton, NCard, NEmpty } from 'naive-ui';
+import { getLogs } from '~/helpers/index';
 
 const { address, chain } = useAccount();
 const client = useClient();
+const contract = computed(() => getSchemaRegistryContract(chain.value.id));
 
 const { data: grantedSchemas } = useAsyncData(
   'grantedSchemas',
@@ -14,15 +16,13 @@ const { data: grantedSchemas } = useAsyncData(
     if (!address.value) {
       return [];
     }
-    const schemaRegistry = getSchemaRegistryContract(chain.value.id);
-    return client.value.getContractEvents({
-      address: schemaRegistry.address,
-      abi: schemaRegistry.abi,
-      eventName: 'GrantPermission',
-      args: {
-        usr: address.value,
-      },
-    });
+
+    try {
+      return getLogs(contract.value, address.value, '');
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   },
   {
     immediate: true,
@@ -36,12 +36,12 @@ const { data: deniedSchemas } = useAsyncData(
     if (!client.value?.address) {
       return [];
     }
-    const contract = getSchemaRegistryContract(client.value.id);
-    return client.value.getContractEvents({
-      address: contract.address,
-      abi: contract.abi,
-      eventName: 'DenyPermission',
-    });
+    try {
+      return getLogs(contract.value, address.value, '');
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   },
   {
     immediate: true,
@@ -70,10 +70,13 @@ const schemas = computed(() => {
 
 <template>
   <div class="flex flex-col">
-    <n-button class="w-52 self-end" @click="navigateTo('/schema/create')">
-      Create Schema
-    </n-button>
-    <div
+    <div class="w-full flex justify-between">
+      <h2 class="font-bold text-lg mb-2">Schema List</h2>
+      <n-button class="w-52" @click="navigateTo('/attestation')">
+        Give Permission
+      </n-button>
+    </div>
+    <!-- <div
       v-for="schema in schemas"
       :key="schema[0]"
       class="flex flex-col gap-y-1"
@@ -81,7 +84,7 @@ const schemas = computed(() => {
       <n-card class="rounded-md" :title="schema[0]" size="small">
         Schema: {{ schema[2] }}
       </n-card>
-    </div>
+    </div> -->
     <div v-if="schemas.length === 0" class="mt-4 h-40">
       <n-empty
         class="h-full w-full flex justify-center items-center"

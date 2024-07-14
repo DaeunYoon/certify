@@ -21,7 +21,7 @@ async function createSchema() {
   const schemaRegistry = getSchemaRegistryContract(chain.value.id);
   const schema = schemaItems.value
     .map((item) => {
-      return `${item.name} ${item.type}`;
+      return `${item.type} ${item.name}`;
     })
     .join(',');
 
@@ -44,7 +44,7 @@ async function createSchema() {
 
 function closePopup() {
   showSuccessPopup.value = false;
-  navigateTo('/');
+  navigateTo('/schema');
 }
 </script>
 <template>

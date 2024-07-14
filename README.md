@@ -46,7 +46,7 @@ $ forge script script/Deploy.s.sol:DeployScript --fork-url <CHAIN_TO_DEPLOY>
 
 :note: The above code only simulate deploy. If you want to actually broadcast the transactions and verify contracts please add `--verifier blockscout --verifier_url "${CHAIN_BLOCKSCOUT_URL}/api?" --verify --broadcast`
 
-eg. deploy on sepolia
+eg. deploy on sepolia (after run `source .env` to use current location .env)
 ```shell
-forge script script/Deploy.s.sol:DeployScript --fork-url sepolia --verifier blockscout --verifier-url "${SEPOLIA_BLOCKSCOUT_URL}/api?" --verify --broadcast
+forge script script/Deploy.s.sol:DeployScript --fork-url sepolia --verifier blockscout --verifier-url "$SEPOLIA_BLOCKSCOUT_URL/api?" --verify --broadcast
 ```

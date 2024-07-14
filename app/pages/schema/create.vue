@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import SchemasCreate from '~/components/Schemas/Create.vue';
+import SchemaCreate from '~/components/Schema/Create.vue';
 </script>
 <template>
-  <SchemasCreate />
+  <SchemaCreate />
 </template>

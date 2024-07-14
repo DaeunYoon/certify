@@ -15,7 +15,7 @@ contract SchemaRegistryTest is Test {
 
     // Events
     event Registered(bytes32 indexed uid);
-    event GrantPermission(bytes32 indexed uid, address indexed usr);
+    event GrantPermission(bytes32 indexed uid, address indexed usr, string schema);
     event DenyPermission(bytes32 indexed uid, address indexed usr);
 
     function setUp() public {
@@ -43,7 +43,7 @@ contract SchemaRegistryTest is Test {
         vm.stopPrank();
 
         vm.expectEmit(true, true, false, false);
-        emit GrantPermission(uid, alice);
+        emit GrantPermission(uid, alice, "schema2");
         schemaRegistry.grantPermission(uid, alice);
 
         vm.startPrank(alice);

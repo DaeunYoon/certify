@@ -15,7 +15,7 @@ interface ISchemaRegistry {
     /// @notice Emitted when a user has been granted access to a schema
     /// @param uid The schema UID.
     /// @param usr The user address.
-    event GrantPermission(bytes32 indexed uid, address indexed usr);
+    event GrantPermission(bytes32 indexed uid, address indexed usr, string schema);
 
     /// @notice Emitted when a user has been denied access to a schema
     /// @param uid The schema UID.

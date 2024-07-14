@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import SchemasList from '~/components/Schemas/List.vue';
+import SchemaList from '~/components/Schema/List.vue';
+import AttestationList from '~/components/Attestation/List.vue';
 </script>
 
 <template>
-  <div>
-    <SchemasList />
+  <div class="flex flex-col gap-8">
+    <SchemaList />
+    <AttestationList />
   </div>
 </template>
