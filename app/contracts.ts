@@ -107,6 +107,11 @@ const ABIs = {
           type: 'bytes32',
         },
         {
+          internalType: 'bytes32',
+          name: 'symmetricKey',
+          type: 'bytes32',
+        },
+        {
           internalType: 'bytes',
           name: 'data',
           type: 'bytes',
@@ -152,6 +157,16 @@ const ABIs = {
           name: 'recipient',
           type: 'address',
         },
+        {
+          internalType: 'bytes32',
+          name: 'symmetricKey',
+          type: 'bytes32',
+        },
+        {
+          internalType: 'uint256',
+          name: 'currentTimestamp',
+          type: 'uint256',
+        },
       ],
       name: 'attest',
       outputs: [
@@ -184,6 +199,11 @@ const ABIs = {
             {
               internalType: 'bytes32',
               name: 'schema',
+              type: 'bytes32',
+            },
+            {
+              internalType: 'bytes32',
+              name: 'symmetricKey',
               type: 'bytes32',
             },
             {
@@ -399,8 +419,8 @@ const ABIs = {
 
 const addresses = {
   11155111: {
-    schemaRegistry: '0xb9711766A3b83451d87F05357a929798E8ef2143',
-    attestationRegistry: '0x1018BB88361BC8669E2465a28bac7d90b19842e1',
+    schemaRegistry: '0x73F45027CcE51be3F316018599245459b6d5089B',
+    attestationRegistry: '0x0C94fD3e8adc4A6E7b0923FACdF085686e447128',
   },
   84532: {},
   421614: {},
@@ -420,7 +440,7 @@ const events = {
   },
 };
 
-export function getSchemaRegistryContract(chainId: string) {
+export function getSchemaRegistryContract(chainId: number) {
   return {
     address: addresses[chainId].schemaRegistry,
     abi: ABIs.schemaRegistryLike,
@@ -432,5 +452,6 @@ export function getAttestationRegistryContract(chainId: string) {
   return {
     address: addresses[chainId].attestationRegistry,
     abi: ABIs.attestationRegistryLike,
+    events: events.attestationRegistry,
   };
 }

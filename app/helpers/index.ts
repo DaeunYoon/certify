@@ -8,6 +8,8 @@ import {
   encodeAbiParameters,
   decodeAbiParameters,
   parseAbiParameters,
+  encodePacked,
+  keccak256,
 } from 'viem';
 
 export function renderIcon(icon: Component) {
@@ -15,8 +17,8 @@ export function renderIcon(icon: Component) {
 }
 
 export async function getLogs(
-  contractAddress: string,
-  userAddress: string,
+  contractAddress: `0x${string}`,
+  userAddress: `0x${string}`,
   topic0: string
 ): Promise<any[]> {
   const formattedWallet = userAddress.replace(
@@ -105,3 +107,24 @@ export const encodeAttestationData = function (
     optionValues
   );
 };
+
+export function calculateAttestationUid(
+  schema: any,
+  recipient: any,
+  attester: any,
+  time: any
+) {
+  // @NOTE: ignore bump value for now
+  return keccak256(
+    encodePacked(
+      ['bytes32', 'address', 'address', 'uint256', 'bytes32'],
+      [
+        schema,
+        recipient,
+        attester,
+        time,
+        '0x0000000000000000000000000000000000000000000000000000000000000000',
+      ]
+    )
+  );
+}

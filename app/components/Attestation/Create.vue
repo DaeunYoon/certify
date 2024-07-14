@@ -2,8 +2,12 @@
 import { NButton, NModal } from 'naive-ui';
 import { getAttestationRegistryContract } from '~/contracts';
 import useWallet from '~/composables/useWallet';
-import { encodeAttestationData } from '~/helpers/index';
+import {
+  encodeAttestationData,
+  calculateAttestationUid,
+} from '~/helpers/index';
 import { getAddress } from 'viem';
+import getLit from '~/helpers/lit';
 
 const route = useRoute();
 const schema = computed(() => route.query.schema);
@@ -18,20 +22,34 @@ const parsedSchema = computed(() => {
 });
 
 const wallet = useWallet();
-const { chain } = useAccount();
+const { chain, address } = useAccount();
 const client = useClient();
 
 const showSuccessPopup = ref(false);
 
 async function createAttestation(value) {
   try {
-    if (!wallet.value) {
+    if (!wallet.value || !address.value) {
       console.error('Wallet not connected');
       return;
     }
 
     const { recipient, ...content } = value;
+    const currentTimestamp = Date.now();
+
+    const expectedUid = calculateAttestationUid(
+      schemaUID.value,
+      recipient,
+      address.value,
+      currentTimestamp
+    );
+
     const data = encodeAttestationData(schema.value, content);
+
+    const lit = getLit();
+
+    const encryptedInformation = await lit.encryptString(data, expectedUid);
+    console.log(encryptedInformation);
 
     const attestationRegistry = getAttestationRegistryContract(chain.value.id);
     const [account] = await wallet.value.getAddresses();
@@ -40,7 +58,13 @@ async function createAttestation(value) {
       address: attestationRegistry.address,
       abi: attestationRegistry.abi,
       functionName: 'attest',
-      args: [schemaUID.value, data, getAddress(recipient)],
+      args: [
+        schemaUID.value,
+        encryptedInformation.encryptedString,
+        getAddress(recipient),
+        encryptedInformation.encryptedSymmetricKey,
+        currentTimestamp,
+      ],
       account,
     });
 

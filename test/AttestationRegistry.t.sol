@@ -36,7 +36,7 @@ contract IAttestationRegistryTest is Test {
 
     function testAttestAndRevoke() public {
         bytes memory data = abi.encodePacked("data");
-        bytes32 uid = attestationRegistry.attest(schemaUID, data, alice);
+        bytes32 uid = attestationRegistry.attest(schemaUID, data, alice, 0, block.timestamp);
 
         assertEq(attestationRegistry.getAttestation(uid).revokedAt, 0);
         attestationRegistry.revoke(uid);
@@ -45,7 +45,7 @@ contract IAttestationRegistryTest is Test {
 
     function testHasPermissionToDecrypt() public {
         bytes memory data = abi.encodePacked("data");
-        bytes32 uid = attestationRegistry.attest(schemaUID, data, alice);
+        bytes32 uid = attestationRegistry.attest(schemaUID, data, alice, 0, block.timestamp);
 
         vm.startPrank(alice);
         assertEq(attestationRegistry.hasPermissionToDecrypt(uid, alice), true);

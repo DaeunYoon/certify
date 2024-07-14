@@ -1,5 +1,22 @@
 <script setup lang="ts">
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutFooter } from 'naive-ui';
+import useAccount from '~/composables/useAccount';
+import { connectLit } from '~/helpers/lit';
+import * as LitJsSdk from '@lit-protocol/lit-node-client';
+
+const { chain } = useAccount();
+watch(
+  chain,
+  (newChain, prev) => {
+    console.log('Chain changed to:', newChain?.name);
+    if (newChain && newChain.id !== prev?.id) {
+      const chainName = newChain.name.toLocaleLowerCase();
+      LitJsSdk.disconnectWeb3();
+      connectLit(chainName);
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>

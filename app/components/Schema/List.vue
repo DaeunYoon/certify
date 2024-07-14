@@ -14,7 +14,7 @@ const contract = computed(() =>
 
 const grantedSchemas = computedAsync(
   async () => {
-    if (!contract.value) {
+    if (!contract.value || !address.value) {
       return [];
     }
 

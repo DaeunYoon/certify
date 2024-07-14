@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 struct AttestationRecord {
     bytes32 uid;
     bytes32 schema;
+    bytes32 symmetricKey;
     bytes data;
     address attester;
     address recipient;
@@ -37,7 +38,7 @@ interface IAttestationRegistry {
     /// @param data The data to be attested.
     /// @param receiver The receiver of the attestation.
     /// @return The UID of the attestation.
-    function attest(bytes32 schemaUID, bytes calldata data, address receiver) external returns (bytes32);
+    function attest(bytes32 schemaUID, bytes calldata data, address receiver, bytes32 symmetricKey, uint256 currentTimestamp) external returns (bytes32);
 
     function revoke(bytes32 uid) external;
 

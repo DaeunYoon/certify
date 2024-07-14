@@ -16,7 +16,7 @@ contract AttestationRegistry is IAttestationRegistry {
     }
 
     /// @inheritdoc IAttestationRegistry
-    function attest(bytes32 schemaUID, bytes calldata data, address recipient) external override returns (bytes32) {
+    function attest(bytes32 schemaUID, bytes calldata data, address recipient, bytes32 symmetricKey, uint256 currentTimestamp) external override returns (bytes32) {
         // Ensure that we aren't attempting to attest to a non-existing schema.
         SchemaRecord memory schemaRecord = schemaRegistry.getSchema(schemaUID);
         require(schemaRecord.uid != EMPTY_UID, "Attestation/non-existing-schema");
@@ -27,11 +27,12 @@ contract AttestationRegistry is IAttestationRegistry {
         AttestationRecord memory attestation = AttestationRecord({
             uid: EMPTY_UID,
             schema: schemaUID,
-            time: block.timestamp,
+            time: currentTimestamp,
             revokedAt: 0,
             recipient: recipient,
             attester: msg.sender,
-            data: data
+            data: data,
+            symmetricKey: 0
         });
 
         // Look for the first non-existing UID (and use a bump seed/nonce in the rare case of a conflict).
@@ -48,6 +49,7 @@ contract AttestationRegistry is IAttestationRegistry {
             }
         }
         attestation.uid = uid;
+        attestation.symmetricKey = symmetricKey;
 
         _db[uid] = attestation;
         _grant(uid, msg.sender, MAX_TIMESTAMP);
@@ -108,7 +110,6 @@ contract AttestationRegistry is IAttestationRegistry {
                 attestation.recipient,
                 attestation.attester,
                 attestation.time,
-                attestation.data,
                 bump
             )
         );
