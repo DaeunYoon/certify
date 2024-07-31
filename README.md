@@ -50,4 +50,3 @@ eg. deploy on sepolia (after run `source .env` to use current location .env)
 ```shell
 forge script script/Deploy.s.sol:DeployScript --fork-url sepolia --verifier blockscout --verifier-url "$SEPOLIA_BLOCKSCOUT_URL/api?" --verify --broadcast
 ```
-
